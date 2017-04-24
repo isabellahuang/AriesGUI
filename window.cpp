@@ -47,13 +47,17 @@ Window::Window(QWidget *parent) : QWidget(parent)
     vbox = new QVBoxLayout(this);
     vbox->addWidget(start_recording_button);
     vbox->addWidget(loading_gif_label);
-//    vbox->addWidget(confirm_object_button);
+    vbox->addWidget(confirm_object_button);
     speech_to_text_box->setLayout(vbox);
     grid->addWidget(speech_to_text_box, 1, 0);
+    confirm_object_button->setEnabled(false);
 
     // ##########################
     // Flight Status
     // ##########################
+    search_again_button = new QPushButton("Search again", this);
+    start_flight_button = new QPushButton("Start flight", this);
+    confirm_camshift_button = new QPushButton("Confirm camshift", this);
     flight_status_label = new QLabel("Flight label", this);
     flight_status_label->setText("Idle");
     QFont font = flight_status_label->font();
@@ -62,6 +66,10 @@ Window::Window(QWidget *parent) : QWidget(parent)
     flight_status_label->setStyleSheet("background: yellow");
     QVBoxLayout *vbox_flight_status = new QVBoxLayout(this);
     vbox_flight_status->addWidget(flight_status_label);
+    vbox_flight_status->addWidget(start_flight_button);
+    vbox_flight_status->addWidget(search_again_button);
+    vbox_flight_status->addWidget(confirm_camshift_button);
+
     flight_status_box = new QGroupBox(tr("Flight Status"), this);
     flight_status_box->setLayout(vbox_flight_status);
     grid->addWidget(flight_status_box, 2, 0);
@@ -103,9 +111,28 @@ Window::Window(QWidget *parent) : QWidget(parent)
     // Make the connection
     connect(audio, SIGNAL(stateChanged(QAudio::State)), this, SLOT(handleStateChanged(QAudio::State)));
     connect(start_recording_button, SIGNAL(clicked(bool)), this, SLOT(startRecording()));
+    connect(start_flight_button, SIGNAL(clicked(bool)), this, SLOT(startFlightResponder()));
+    connect(search_again_button, SIGNAL(clicked(bool)), this, SLOT(searchAgainResponder()));
+    connect(confirm_camshift_button, SIGNAL(clicked(bool)), this, SLOT(confirmCamshiftResponder()));
+
 }
 
+void Window::startFlightResponder() {
+    qInfo() << "Emitting start flight";
+    start_flight_button->setEnabled(false);
 
+    emit startFlight();
+}
+
+void Window::searchAgainResponder() {
+    qInfo() << "Emitting search again";
+    emit searchAgain();
+}
+
+void Window::confirmCamshiftResponder() {
+    qInfo() << "Emitting search again";
+    emit confirmCamshift();
+}
 
 void Window::startRecording() {
     qInfo() << "Started recording" ;
@@ -133,6 +160,8 @@ void Window::startRecording() {
 
     loading_movie->setScaledSize(QSize(35, 35));
     loading_movie->start();
+    confirm_object_button->setEnabled(false);
+
 
     QTimer::singleShot(3000, this, SLOT(stopRecording()));
 }
@@ -152,7 +181,7 @@ void Window::stopRecording()
     loading_gif_label->setText(test_result);
 
     start_recording_button->setText("Record again");
-    vbox->addWidget(confirm_object_button);
+    confirm_object_button->setEnabled(true);
 
     // Hardcoded stuff: remove
 //    flight_status_label->setText("Awaiting confirmation...");
@@ -170,7 +199,6 @@ void Window::stopRecording()
 
 void Window::valueChanged(QPixmap newValue) {
     stream_label->setPixmap(newValue.scaledToWidth(800));
-
 }
 
 void Window::handleStateChanged(QAudio::State newState)

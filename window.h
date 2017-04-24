@@ -24,10 +24,15 @@ public:
 signals:
     void counterReached();
     void stateChanged(QAudio::State newState);
-
+    void startFlight();
+    void searchAgain();
+    void confirmCamshift();
 private slots:
     void stopRecording();
     void startRecording();
+    void startFlightResponder();
+    void searchAgainResponder();
+    void confirmCamshiftResponder();
     void handleStateChanged(QAudio::State newState);
     void valueChanged(QPixmap newValue);
     void delay( int millisecondsToWait );
@@ -36,8 +41,11 @@ private slots:
 private:
     int m_counter;
     QPushButton *m_button;
+    QPushButton *search_again_button;
+    QPushButton *start_flight_button;
     QPushButton *start_recording_button;
     QPushButton *confirm_object_button;
+    QPushButton *confirm_camshift_button;
     QAudioInput* audio;
     QFile destinationFile;
     QLabel *stream_label;

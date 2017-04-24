@@ -18,6 +18,8 @@ private:
     QString m_lastTime;
     QImage myImage;
     bool keep_running;
+    bool start_haar;
+    bool confirmed_camshift;
 
 
 signals:
@@ -25,6 +27,8 @@ signals:
 private slots:
     void timerHit();
     void endThread();
+    void searchAgainSlot();
+    void confirmCamshiftSlot();
 
 };
 
