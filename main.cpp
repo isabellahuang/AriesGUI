@@ -31,18 +31,15 @@ int main(int argc, char **argv) {
 //    QObject::connect(&thread, SIGNAL(sendTime(QString)), &window, SLOT(valueChanged(QString)), Qt::QueuedConnection);
     QObject::connect(&thread, SIGNAL(sendTime(QPixmap)), &window, SLOT(valueChanged(QPixmap)), Qt::QueuedConnection);
     QObject::connect(&app, SIGNAL(aboutToQuit()), &thread, SLOT(endThread()));
-    QObject::connect(&window, SIGNAL(startFlight()), &thread, SLOT(start()), Qt::QueuedConnection);
+    QObject::connect(&app, SIGNAL(aboutToQuit()), &window, SLOT(disconnectFromDevice()));
+
+    QObject::connect(&window, SIGNAL(startFlight()), &thread, SLOT(startFlightFlag()), Qt::QueuedConnection);
     QObject::connect(&window, SIGNAL(searchAgain()), &thread, SLOT(searchAgainSlot()), Qt::QueuedConnection);
     QObject::connect(&window, SIGNAL(confirmCamshift()), &thread, SLOT(confirmCamshiftSlot()), Qt::QueuedConnection);
 
+    QObject::connect(&thread, SIGNAL(changeStatusSignal(QString)), &window, SLOT(changeStatusSlot(QString)), Qt::QueuedConnection);
 //    QObject::connect(&window, SIGNAL(start_flight_button.clicked()), &thread, SLOT(endThread()));
-
-
-//    thread.start();
-
-    qDebug() << "Hello from the GUI THread" << app.thread()->currentThreadId();
-
-
+    thread.start();
 
     app.exec();
     thread.quit();

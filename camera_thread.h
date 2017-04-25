@@ -18,15 +18,18 @@ private:
     QString m_lastTime;
     QImage myImage;
     bool keep_running;
+    bool start_flight;
     bool start_haar;
     bool confirmed_camshift;
 
 
 signals:
     void sendTime(QPixmap time);
+    void changeStatusSignal(QString status);
 private slots:
     void timerHit();
     void endThread();
+    void startFlightFlag();
     void searchAgainSlot();
     void confirmCamshiftSlot();
 
