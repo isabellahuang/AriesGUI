@@ -29,7 +29,7 @@ DISTFILES += \
 INCLUDEPATH += /usr/local/include/sphinxbase
 INCLUDEPATH += /usr/local/include/pocketsphinx
 
-LIBS+= -L/usr/local/lib \
+LIBS+= -L /usr/local/lib \
     -lpocketsphinx \
     -lsphinxbase    \
     -lm                     \
@@ -48,12 +48,12 @@ LIBS+= -L/usr/local/lib \
     -lopencv_objdetect      \
     -lopencv_video
 
-LIBS          += /users/isabellahuang/AriesGUI/src/ardrone/ardrone.o \
-                /users/isabellahuang/AriesGUI/src/ardrone/command.o \
-                /users/isabellahuang/AriesGUI/src/ardrone/config.o  \
-                /users/isabellahuang/AriesGUI/src/ardrone/udp.o     \
-                /users/isabellahuang/AriesGUI/src/ardrone/tcp.o     \
-                /users/isabellahuang/AriesGUI/src/ardrone/navdata.o \
-                /users/isabellahuang/AriesGUI/src/ardrone/version.o \
-                /users/isabellahuang/AriesGUI/src/ardrone/video.o
+LIBS          += /home/kevin/Projects/Capstone/AriesGUI/src/ardrone/ardrone.o \
+                /home/kevin/Projects/Capstone/AriesGUI/src/ardrone/command.o \
+                /home/kevin/Projects/Capstone/AriesGUI/src/ardrone/config.o  \
+                /home/kevin/Projects/Capstone/AriesGUI/src/ardrone/udp.o     \
+                /home/kevin/Projects/Capstone/AriesGUI/src/ardrone/tcp.o     \
+                /home/kevin/Projects/Capstone/AriesGUI/src/ardrone/navdata.o \
+                /home/kevin/Projects/Capstone/AriesGUI/src/ardrone/version.o \
+                /home/kevin/Projects/Capstone/AriesGUI/src/ardrone/video.o
 
