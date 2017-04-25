@@ -3,7 +3,7 @@
 
 enum ITEM {
     PIKA,
-    BASK,
+    PIN,
     WPOT,
     BALL};
 
@@ -32,15 +32,33 @@ enum ITEM {
 #define REDH 25
 #define REDL 300
 
+/*
+The VIO (very important object) class is a wrapper for all the objects that you 
+wish to detect
+Any new object you should classify should be added to this class.
 
-class Object_Manager {
+How to use:
+Declare an instance of VIO, passing in the appropriate enum corresponding to the object
+that you wish to detect.
+
+VIO would have these attributes
+
+oid: Object ID, containing the enum of the object you wish to detect
+cascade: the path to the xml that you wish to use for haar
+minL: ??
+maxL: ??
+
+TODO: You'll have to copy and paste this into your camera_thread.cpp
+*/
+class VIO {
     // The items we can currently detect
     // TODO: ENSURE THIS WORKS
     String face_cascade_name = "trained_classifiers/haarcascade_frontalface_default.xml";
     String pika_cascade_name = "trained_classifiers/pikacascade7.xml";
     String ball_cascade_name = "trained_classifiers/ball_cascade7.xml";
-    String basket_cascade_name = "trained_classifiers/basket_cascade8.xml";
+    String pin_cascade_name = "trained_classifiers/pin_cascade<UNKNOWN>.xml";
     String pot_cascade_name = "trained_classifiers/pot_cascade9.xml";
+
     public:
         // getters
         int getMinL();
@@ -50,7 +68,7 @@ class Object_Manager {
         cv::Mat getColor(cv::Mat H);
 
         // setters
-        Object_Manager(ITEM id); // Constructor
+        VIO(ITEM id); // Constructor
 
     private:
         ITEM oid; //PIKA, BALL, WPOT
@@ -60,11 +78,11 @@ class Object_Manager {
         // cv::Mat color;
 };
 
-Object_Manager::getColor(cv::Mat H) {
+VIO::getColor(cv::Mat H) {
     return (H > minL) | (H < maxL);
 }
 
-Object_Manager::Object_Manager(ITEM id) {
+VIO::VIO(ITEM id) {
     switch(id) {
         case PIKA: 
             oid = id;
@@ -85,6 +103,13 @@ Object_Manager::Object_Manager(ITEM id) {
             cascade = ball_cascade_name;
             minL = BLUL;
             maxL = BLUH;
+            break;
+
+        case PIN:
+            oid = id;
+            cascade = pin_cascade_name;
+            minL = -1;
+            maxL = -1;
             break;
     }
 }
