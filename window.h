@@ -15,6 +15,10 @@
 #include <QGridLayout>
 #include <QMediaPlayer>
 #include <QAudioOutput>
+#include <QBluetoothDeviceDiscoveryAgent>
+#include <QLowEnergyController>
+#include <QBluetoothUuid>
+#include <QLowEnergyService>
 
 class Window : public QWidget
 {
@@ -27,6 +31,7 @@ signals:
     void startFlight();
     void searchAgain();
     void confirmCamshift();
+
 private slots:
     void stopRecording();
     void startRecording();
@@ -37,6 +42,17 @@ private slots:
     void valueChanged(QPixmap newValue);
     void delay( int millisecondsToWait );
     QString sphinx_test();
+    void addDevice(const QBluetoothDeviceInfo&);
+    void deviceConnected();
+    void disconnectFromDevice();
+    void deviceDisconnected();
+    void errorReceived(QLowEnergyController::Error);
+    void serviceDiscovered(const QBluetoothUuid &gatt);
+    void serviceScanDone();
+    void serviceStateChanged(QLowEnergyService::ServiceState);
+    void dropMarker();
+    void changeStatusSlot(QString status);
+
 
 private:
     int m_counter;
@@ -63,12 +79,24 @@ private:
     QGroupBox *flight_status_box;
     QGroupBox *stream_box;
     QVBoxLayout *vbox;
-//    QVBoxLayout *vbox;
     QGridLayout *grid;
     QLabel *title;
     QMediaPlayer *player;
     QAudioOutput *audio_output;
     QFile inputFile;
+    QPushButton *drop_marker_button;
+
+
+    // Bluetooth stuff
+    QBluetoothDeviceDiscoveryAgent *m_deviceDiscoveryAgent;
+    QLowEnergyController *m_control;
+    bool foundDevice = false;
+    int uart_command = 0;
+    QLowEnergyService *m_service;
+
+
+
+
 
 public slots:
 };
